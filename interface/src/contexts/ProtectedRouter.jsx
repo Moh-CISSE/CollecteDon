@@ -1,0 +1,13 @@
+import { Navigate } from "react-router-dom";
+import { useAuth } from "./Authcontext";
+
+export function ProtectedRouter({children}){
+    const {user} = useAuth() ;
+    if (!user || !user.id_user){
+        return <Navigate to= "/login" replace />
+    } 
+    if(user.isBlocked == 1){
+         return <Navigate to= "/" replace />
+    }
+    return children;
+}
