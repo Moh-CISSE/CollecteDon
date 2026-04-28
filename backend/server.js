@@ -17,7 +17,7 @@ try {
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
   console.log("Serveur lancé sur le port " + PORT);
