@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../contexts/AuthContexte';
+import { useAuth } from '../contexts/AuthContext';
 import { defaultCategories } from '../types/Index';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardFooter } from '../components/ui/card';
