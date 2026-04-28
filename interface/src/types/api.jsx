@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
 export async function apiLogin(email, password) {
-  const res = await fetch(`${API_URL}/auth/login`, {
+  const res = await fetch(`${API_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password }),
@@ -12,7 +12,7 @@ export async function apiLogin(email, password) {
 }
 
 export async function apiRegister(name, email, phone, password) {
-  const res = await fetch(`${API_URL}/auth/register`, {
+  const res = await fetch(`${API_URL}/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email, phone, password }),
@@ -35,7 +35,7 @@ export async function apiCreateannonce(token,updates) {
  if (updates.photoFile) {
     formData.append("photo", updates.photoFile);
   } 
-  const res = await fetch(`${API_URL}/auth/annonce/create`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/create`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`, 
@@ -47,7 +47,7 @@ export async function apiCreateannonce(token,updates) {
   return res.json();
 }
 export async function apiGetAnnonce() {
-  const res = await fetch(`${API_URL}/auth/annonce`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });
@@ -57,7 +57,7 @@ export async function apiGetAnnonce() {
 }
 export async function apiAnnulerreserverAnnonce(id_annonce) {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/auth/annonce/annuler/${id_annonce}`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/annuler/${id_annonce}`, {
     method: "PATCH",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -72,7 +72,7 @@ export async function apiAnnulerreserverAnnonce(id_annonce) {
 }
 export async function apireserverAnnonce(id_annonce) {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/auth/annonce/reserver/${id_annonce}`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/reserver/${id_annonce}`, {
     method: "PATCH",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -88,7 +88,7 @@ export async function apireserverAnnonce(id_annonce) {
 export async function apirecupereAnnonce(id_annonce) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/auth/annonce/recupere`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/recupere`, {
     method: "PATCH",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -132,7 +132,7 @@ export async function apimodifyAnnonce(updates) {
 export async function apideleteAnnonce(id_annonce) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/auth/annonce/delete`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/delete`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -147,7 +147,7 @@ export async function apideleteAnnonce(id_annonce) {
 
 
 export async function apiGetProfile(token) {
-  const res = await fetch(`${API_URL}/auth/me`, {
+  const res = await fetch(`${API_URL}/api/auth/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -163,7 +163,7 @@ export async function apiUpdateProfile(token, updates) {
     formData.append("photo", updates.file);
   }
 
-  const res = await fetch(`${API_URL}/auth/update`, {
+  const res = await fetch(`${API_URL}/api/auth/update`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`, 
@@ -181,7 +181,7 @@ export async function apiUpdateProfile(token, updates) {
 export async function apideleteUserAnnonce(userId) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/auth/annonce/delete/userannonce`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/delete/userannonce`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -195,7 +195,7 @@ export async function apideleteUserAnnonce(userId) {
 }
 export async function apiblockUser(userId,val) {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/auth/annonce/blockuser`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/blockuser`, {
     method: "PATCH",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -210,7 +210,7 @@ export async function apiblockUser(userId,val) {
 export async function apideleteUser(userId) {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/auth/annonce/deleteuser`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/deleteuser`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -225,7 +225,7 @@ export async function apideleteUser(userId) {
 export async function apigetAllUser() {
   const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/auth/annonce/alluser`, {
+  const res = await fetch(`${API_URL}/api/auth/annonce/alluser`, {
     method: "GET",
     headers: {
       "Authorization": `Bearer ${token}`,
