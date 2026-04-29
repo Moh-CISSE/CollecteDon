@@ -1,3 +1,5 @@
+/* Importation des hooks React, du contexte Auth,
+   des composants UI et des utilitaires */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -10,10 +12,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
-
+/* Composant CreateAnnonce : permet à un utilisateur connecté de publier une annonce */
 export function CreateAnnonce() {
+  /* Récupération de l'utilisateur et de la fonction de création d'annonce */
   const { user, createannonce } = useAuth();
+  /* Hook de navigation */
   const navigate = useNavigate();
+  /* États du formulaire */
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState ('');
@@ -22,20 +27,20 @@ export function CreateAnnonce() {
   const [ville,setVille]=useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
-
+  /* Redirection vers login si l'utilisateur n'est pas connecté */
  useEffect(() => {
   if (!user) {
     navigate('/login');
   }
 }, [user, navigate]);
-
+/* Empêche l'affichage du formulaire si pas connecté */
 if (!user) return null;
 
-
+  /* Gestion de la soumission du formulaire :
+     création de l'objet annonce, appel API et gestion des erreurs */
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+/* Création de l'objet annonce à envoyer */
   const newAnnonce = {
     titre: title,
     description,
@@ -48,8 +53,10 @@ const handleSubmit = async (e) => {
   setLoading(true);
   setError("");
   try {
+    /* Appel à la fonction de création */
     const success = await createannonce(newAnnonce);
     if (success) {
+      /* Notification succès + redirection */
       toast.success("Annonce publiée avec succès");
       navigate("/my-annonces");
     } else {
@@ -58,6 +65,7 @@ const handleSubmit = async (e) => {
   } catch (err) {
     setError("Erreur lors de la création de l'annonce");
   } finally {
+    /* Désactivation du loading */
     setLoading(false);
   }
 };
@@ -65,6 +73,7 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
+      {/* Bouton retour */}
       <Button 
         variant="ghost" 
         onClick={() => navigate(-1)}
@@ -82,7 +91,9 @@ const handleSubmit = async (e) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+           {/* Formulaire */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Champ titre */}
             <div className="space-y-2">
               <Label htmlFor="title">Titre de l'annonce *</Label>
               <Input
@@ -94,7 +105,7 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
-
+            {/* Sélection catégorie */}
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie *</Label>
               <Select value={category} onValueChange={(value) => setCategory(value)}>
@@ -113,7 +124,7 @@ const handleSubmit = async (e) => {
                 </SelectContent>
               </Select>
             </div>
-
+            {/* Champ description */}
             <div className="space-y-2">
               <Label htmlFor="description">Description *</Label>
               <Textarea
@@ -125,6 +136,7 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
+             {/* Champ ville */}
             <div className="space-y-2">
               <Label htmlFor="title">Ville *</Label>
               <Input
@@ -136,7 +148,7 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
-
+             {/* Upload photo */}
             <div className="space-y-2">
               <Label htmlFor="photo">Photo de l'objet *</Label>
               <Input
@@ -152,6 +164,7 @@ const handleSubmit = async (e) => {
                 }}
               />
               </div>
+              {/* Aperçu image */}
               {photoUrl && (
                   <div className="mt-3">
                     <img
@@ -161,7 +174,7 @@ const handleSubmit = async (e) => {
                     />
                   </div>
                 )}
-
+            {/* Informations de contact */}
            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-800">
                 <strong>Informations de contact :</strong> Vos coordonnées (nom, email
@@ -169,16 +182,19 @@ const handleSubmit = async (e) => {
                 intéressés puissent vous contacter.
               </p>
             </div>
-
+            {/* Boutons */}
             <div className="flex gap-3">
+              {/* Bouton publier */}
               <Button type="submit" className="flex-1">
                {loading ? "Publication..." : "Publier l'annonce"}
               </Button>
+              {/* Message d'erreur */}
               {error && (
                 <p className="text-red-600 text-sm font-medium">
                     {error}
                 </p>
                )}
+               {/* Bouton annuler */}
               <Button 
                 type="button" 
                 variant="outline"

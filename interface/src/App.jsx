@@ -12,6 +12,7 @@ import { Profile } from "./pages/Profile";
 import { Toaster } from "sonner";
 import { Admin } from "./pages/Admin";
 import { ProtectedRouter } from "./contexts/ProtectedRouter";
+import { NotFound } from "./pages/NotFound";
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/my-annonces" element={<ProtectedRouter><MyAnnonces/></ProtectedRouter>} />
         <Route path="/profile" element={<ProtectedRouter><Profile/></ProtectedRouter>} />
         <Route path="/admin" element={<ProtectedRouter><Admin/></ProtectedRouter>} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
 
     </BrowserRouter>

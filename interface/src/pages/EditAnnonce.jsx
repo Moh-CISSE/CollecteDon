@@ -1,101 +1,124 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Textarea } from '../components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { ArrowLeft } from 'lucide-react';
-import { toast } from 'sonner';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-
+/* Importation des hooks React, du contexte Auth, des composants UI et des utilitaires */
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+/* Composant EditAnnonce : permet de modifier une annonce existante */  
 export function EditAnnonce() {
+  /* Récupération de l'id depuis l'URL */
   const { id_annonce } = useParams();
-  const { user, getAnnonce, modifyAnnonce} = useAuth();
+  /* Récupération des fonctions depuis le contexte Auth */
+  const { user, getAnnonce, modifyAnnonce } = useAuth();
+  /* Hook de navigation */
   const navigate = useNavigate();
+  /* États pour stocker les données de l'annonce */
   const [annonce, setAnnonce] = useState(null);
-  const [titre, setTitre] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [ville , setVille]= useState('');
-  const [photoUrl, setPhotoUrl] = useState('');
+  const [titre, setTitre] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [ville, setVille] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
-  const [error, setError] = useState('');
-
-  useEffect( () => {
+  const [error, setError] = useState("");
+  /* Chargement des données de l'annonce lors du montage ou lorsque l'id change */
+  useEffect(() => {
     const loadData = async () => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
-    const annonces = await getAnnonce();
-    const found = annonces.find(a => a.id_annonce == id_annonce);
-    if (!found) {
-      navigate('/my-annonces');
-      return;
-    }
-
-    if (found.id_user !== user.id_user) {
-      toast.error('Vous ne pouvez pas modifier cette annonce');
-      navigate('/my-annonces');
-      return;
-    }
-
-    setAnnonce(found);
-    setTitre(found.titre);
-    setDescription(found.description);
-    setCategory(found.category);
-    setVille(found.ville);
-    setPhotoUrl(found.photo || '');};
+      /*  Vérification si utilisateur connecté */
+      if (!user) {
+        navigate("/login");
+        return;
+      }
+      const annonces = await getAnnonce();
+      /* Recherche de l'annonce */
+      const found = annonces.find((a) => a.id_annonce == id_annonce);
+      /* Si annonce introuvable */
+      if (!found) {
+        navigate("/my-annonces");
+        return;
+      }
+      /* Vérification du propriétaire */
+      if (found.id_user !== user.id_user) {
+        toast.error("Vous ne pouvez pas modifier cette annonce");
+        navigate("/my-annonces");
+        return;
+      }
+      /* Initialisation des champs */
+      setAnnonce(found);
+      setTitre(found.titre);
+      setDescription(found.description);
+      setCategory(found.category);
+      setVille(found.ville);
+      setPhotoUrl(found.photo || "");
+    };
     loadData();
   }, [id_annonce, user]);
-
+  /* Gestion de la soumission du formulaire */
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!annonce) return;
+    if (!annonce) return;
 
-  const annonces = await getAnnonce();
-  const found = annonces.find(a => a.id_annonce == annonce.id_annonce);
+    const annonces = await getAnnonce();
+    const found = annonces.find((a) => a.id_annonce == annonce.id_annonce);
+    /* Vérification existence annonce */
+    if (!found) {
+      setError("Annonce introuvable");
+      return;
+    }
+    /* Vérification catégorie */
+    if (category == undefined) {
+      toast.error("Erreur Sélectionner une categorie");
+    }
+     /* Création de l'objet modifié */
+    const updatedAnnonce = {
+      id_annonce,
+      titre,
+      description,
+      id_categorie: category,
+      ville,
+      photo: photoFile || null,
+    };
+    /* Appel API modification */
+    const response = await modifyAnnonce(updatedAnnonce);
 
-  if (!found) {
-    setError("Annonce introuvable");
-    return;
-  }
-  if(category==undefined){
-    toast.error("Erreur Sélectionner une categorie");
-  }
-
-  const updatedAnnonce = {
-    id_annonce,
-    titre,
-    description,
-    id_categorie: category,
-    ville,
-    photo: photoFile || null,
+    if (response) {
+      toast.success("Annonce mise à jour avec succès");
+      navigate("/my-annonces");
+    } else {
+      setError("Annonce non mise à jour ou une erreur est survenue");
+    }
   };
-
-  const response = await modifyAnnonce(updatedAnnonce);
-
-  if (response) {
-    toast.success("Annonce mise à jour avec succès");
-    navigate("/my-annonces");
-  } else {
-    setError("Annonce non mise à jour ou une erreur est survenue");
-  }
-};
-
+  /* Si l'annonce n'est pas encore chargée */
   if (!annonce) {
     return null;
   }
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <Button 
-        variant="ghost" 
-        onClick={() => navigate('/my-annonces')}
+      {/* Bouton retour */}
+      <Button
+        variant="ghost"
+        onClick={() => navigate("/my-annonces")}
         className="mb-6"
       >
         <ArrowLeft className="size-4 mr-2" />
@@ -110,12 +133,15 @@ export function EditAnnonce() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Affichage des erreurs */}
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
+            {/* Champ titre */}
             <div className="space-y-2">
               <Label htmlFor="titre">Titre de l'annonce *</Label>
               <Input
@@ -127,10 +153,10 @@ export function EditAnnonce() {
                 required
               />
             </div>
-
+            {/* Champ catégorie */}
             <div className="space-y-2">
               <Label htmlFor="category">Catégorie *</Label>
-              <Select value={category  || ""} onValueChange={setCategory}>
+              <Select value={category || ""} onValueChange={setCategory}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -146,7 +172,7 @@ export function EditAnnonce() {
                 </SelectContent>
               </Select>
             </div>
-
+            {/* Champ description */}
             <div className="space-y-2">
               <Label htmlFor="description">Description *</Label>
               <Textarea
@@ -158,6 +184,7 @@ export function EditAnnonce() {
                 required
               />
             </div>
+            {/* Champ ville */}
             <div className="space-y-2">
               <Label htmlFor="title">Ville *</Label>
               <Input
@@ -169,7 +196,7 @@ export function EditAnnonce() {
                 required
               />
             </div>
-
+            {/* Upload image */}
             <div className="space-y-2">
               <Label htmlFor="photo"> photo de l'objet</Label>
               <Input
@@ -179,8 +206,8 @@ export function EditAnnonce() {
                 onChange={(e) => {
                   const file = e.target.files[0];
                   if (file) {
-                    setPhotoUrl(URL.createObjectURL(file)); 
-                    setPhotoFile(file); 
+                    setPhotoUrl(URL.createObjectURL(file));
+                    setPhotoFile(file);
                   }
                 }}
               />
@@ -188,23 +215,25 @@ export function EditAnnonce() {
                 Collez l'URL d'une image de l'objet (optionnel)
               </p>
             </div>
+            {/* Aperçu image */}
             {photoUrl && (
-                  <div className="mt-3">
-                    <img
-                      src={photoUrl}
-                      alt="Aperçu"
-                      className="w-full max-h-64 object-cover rounded-lg border"
-                    />
-                  </div>
-             )}
+              <div className="mt-3">
+                <img
+                  src={photoUrl}
+                  alt="Aperçu"
+                  className="w-full max-h-64 object-cover rounded-lg border"
+                />
+              </div>
+            )}
+            {/* Boutons */}
             <div className="flex gap-3">
               <Button type="submit" className="flex-1">
                 Enregistrer les modifications
               </Button>
-              <Button 
-                type="button" 
+              <Button
+                type="button"
                 variant="outline"
-                onClick={() => navigate('/my-annonces')}
+                onClick={() => navigate("/my-annonces")}
               >
                 Annuler
               </Button>

@@ -1,37 +1,44 @@
+/* Importation des hooks React, des composants UI,
+   du contexte Auth et des utilitaires */
 import { useState, useEffect } from "react";
 import { AnnonceCard } from "@/components/AnnonceCard";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/Authcontext";
 import { Input } from "@/components/ui/input";
 import { Select, SelectItem, SelectContent, SelectValue,SelectTrigger } from "@/components/ui/select";
 import { Filter,Search } from "lucide-react";
 import { defaultCategories } from "@/types/Index";
 import { useNavigate } from "react-router-dom";
 
-
+/* Composant Home : affiche la liste des annonces avec recherche et filtres */
 export function Home() {
+  /* États pour stocker les annonces et les filtres */
   const [annonces, setAnnonces] = useState([]); 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  /* Récupération de la fonction pour charger les annonces */
   const { getAnnonce } = useAuth();
- const navigate = useNavigate;
+  /* Hook de navigation */
+  const navigate = useNavigate();
+   /* Chargement des annonces au montage du composant */
   useEffect(() => {
     loadAnnonces();
   }, [navigate]);
-  
+  /* Fonction pour récupérer les annonces depuis l'API */
   const loadAnnonces = async () => {
   const storedAnnonces = await getAnnonce(); 
   setAnnonces(storedAnnonces);
 };
-
+/* Filtrage des annonces selon recherche, catégorie et statut */
   const filteredAnnonces = annonces.filter((annonce) => {
+    /* Filtre par mot-clé (titre ou description) */
     const matchesSearch =
       annonce.titre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       annonce.description?.toLowerCase().includes(searchTerm.toLowerCase());
-
+    /* Filtre par catégorie */
     const matchesCategory =
       categoryFilter === 'all' || defaultCategories[annonce.id_categorie] === categoryFilter;
-
+    /* Filtre par statut */
     const matchesStatus =
       statusFilter === 'all' || annonce.status === statusFilter;
 
@@ -41,7 +48,7 @@ export function Home() {
   return (
     <div className="container mx-auto px-4 py-8">
 
-      {/* Hero Section */}
+      {/* Section d'introduction */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Plateforme de Don entre Particuliers
@@ -51,10 +58,10 @@ export function Home() {
           récupérez gratuitement dans une démarche solidaire et écoresponsable.
         </p>
       </div>
-
-      {/* Search and Filters */}
+      {/* Barre de recherche et filtres */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
         <div className="flex flex-col md:flex-row gap-4">
+          {/* Champ de recherche */}
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400" />
             <Input
@@ -65,12 +72,13 @@ export function Home() {
               className="pl-10"
             />
           </div>
-          
+          {/* Filtre par catégorie */}  
           <Select value={categoryFilter} onValueChange={setCategoryFilter}  >
             <SelectTrigger className="w-full md:w-48">
               <Filter className="size-4 mr-2" />
               <SelectValue placeholder="Catégorie" />
             </SelectTrigger>
+            {/* Filtre par statut */}
             <SelectContent className=" h-48" >
               <SelectItem value="all">Toutes les catégories</SelectItem>
               <SelectItem value="Mobilier">Mobilier</SelectItem>
@@ -98,12 +106,12 @@ export function Home() {
         </div>
       </div>
 
-      {/* Results */}
+      {/* Nombre de résultats */}
       <p className="mb-4 text-gray-600">
         {filteredAnnonces.length} annonce{filteredAnnonces.length > 1 ? 's' : ''}
       </p>
 
-      {/* Grid */}
+      {/* Affichage des annonces à travers la boucle map*/}
       {filteredAnnonces.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAnnonces.map((annonce) => (
@@ -111,6 +119,7 @@ export function Home() {
           ))}
         </div>
       ) : (
+        /* Message si aucune annonce */
         <p className="text-center text-gray-500">
           Aucune annonce trouvée
         </p>

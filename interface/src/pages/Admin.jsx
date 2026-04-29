@@ -1,3 +1,6 @@
+/* 
+ Importations liées aux fonctions et composants que l'on a utilisées 
+ */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -19,14 +22,26 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '../components/ui/alert-dialog';
-
+/* 
+  Fonction qui permet à l'administrateur de gérer les annonces (supprimer)
+  et les utilisateurs (supprimer, bloquer).
+*/
 export function Admin() {
+  /*
+   Initialisation des hooks et des états 
+   */
   const { user , getAnnonce,getAllUsers,deleteMyannonce,deleteUserAnnonce,deleteUser, blockUser} = useAuth();
   const navigate = useNavigate();
   const [annonces, setAnnonces] = useState([]);
   const [users, setUsers] = useState([]);
   const [deleteAnnonceId, setDeleteAnnonceId] = useState(null);
   const [actionUser, setActionUser] = useState(null);
+  /* 
+  Hook qui vérifie si l'utilisateur est administrateur,
+  puis charge les données (loadData).
+  Il se déclenche à chaque changement de l'utilisateur
+  ou lors d'une navigation.
+*/
   useEffect(() => {
     if (Number(user.isAdmin)!=1) {
       toast.error('Accès non autorisé');
@@ -35,17 +50,23 @@ export function Admin() {
     }
     loadData();
   }, [user, navigate]);
-
+/*
+  La fonction loadData récupère toutes les annonces et tous les utilisateurs,
+  puis les stocke dans les états(annonces, users) créés au début.
+*/
   const loadData =async () => {
     const storedAnnonces = await getAnnonce();
     const storedUsers = await getAllUsers();
     setAnnonces(storedAnnonces);
     setUsers(storedUsers.filter(u => Number(u.isAdmin) !== 1));
   };
-
+/*
+  La fonction handleDeleteAnnonce permet à l'administrateur
+  de supprimer une annonce, de recharger les données
+  et d'afficher une confirmation de suppression.
+*/
   const handleDeleteAnnonce = async() => {
     if (!deleteAnnonceId) return;
-
     const res = await deleteMyannonce(deleteAnnonceId);
     if(res){
         loadData();
@@ -53,11 +74,20 @@ export function Admin() {
         setDeleteAnnonceId(null);
     }
   };
+/*
+  La fonction handleBlockUser permet à l'administrateur
+  de bloquer ou débloquer un utilisateur.
 
+  Elle récupère la liste des utilisateurs, vérifie si l'id
+  passé en paramètre existe, puis appelle la fonction blockUser
+  importée depuis AuthContext.
+
+  val vaut 1 pour bloquer l'utilisateur
+  et 0 pour le débloquer.
+*/
   const handleBlockUser = async(userId,val) => {
     const allUsers = await getAllUsers();
     const userIndex = allUsers.findIndex(u => u.id_user === userId);
-    
     if (userIndex !== -1) {
         const isBlocked = Number(allUsers[userIndex].isBlocked) === 1;
         const res = await blockUser(userId,val);
@@ -69,11 +99,13 @@ export function Admin() {
     }
     setActionUser(null);
   };
-
+/*
+  La fonction handleDeleteUser permet à l'administrateur
+  de supprimer un utilisateur ainsi que toutes ses annonces,
+  de recharger les données et d'afficher une confirmation.
+*/
   const handleDeleteUser = async (userId) => {
-    // Supprimer les annonces de l'utilisateur
     const res1 = await deleteUserAnnonce(userId);
-    // Supprimer l'utilisateur
     const res2 = await deleteUser(userId);
     if (res1 && res2){
         loadData();
@@ -99,6 +131,7 @@ export function Admin() {
             <CardTitle className="text-sm font-medium text-gray-600">Total Annonces</CardTitle>
           </CardHeader>
           <CardContent>
+            {/* permet d'afficher le nombre total des annonces */}
             <p className="text-3xl font-bold">{annonces.length}</p>
           </CardContent>
         </Card>
@@ -107,6 +140,7 @@ export function Admin() {
             <CardTitle className="text-sm font-medium text-gray-600">Total Utilisateurs</CardTitle>
           </CardHeader>
           <CardContent>
+            {/* permet d'afficher le nombre total des utilisateurs */}
             <p className="text-3xl font-bold">{users.length}</p>
           </CardContent>
         </Card>
@@ -115,6 +149,7 @@ export function Admin() {
             <CardTitle className="text-sm font-medium text-gray-600">Utilisateurs bloqués</CardTitle>
           </CardHeader>
           <CardContent>
+            {/* permet d'afficher le nombre total des utilisateurs bloqués */}
             <p className="text-3xl font-bold">{users.filter(u => Number(u.isBlocked)===1).length}</p>
           </CardContent>
         </Card>
@@ -125,7 +160,7 @@ export function Admin() {
           <TabsTrigger value="annonces">Annonces ({annonces.length})</TabsTrigger>
           <TabsTrigger value="users">Utilisateurs ({users.length})</TabsTrigger>
         </TabsList>
-
+        {/* permet d'afficher tout les annonces aves deux option (supprimer, voir) */}
         <TabsContent value="annonces" className="mt-6">
           {annonces.length > 0 ? (
             <div className="space-y-4">
@@ -135,9 +170,9 @@ export function Admin() {
                     {annonce.photo && (
                       <div className="sm:w-32 h-32 flex-`shrink`-0">
                         <img
-                          src={`http://localhost:3000/uploads/${annonce.photo}`} 
+                          src={`https://collecte-backend.onrender.com/uploads/${annonce.photo}`} 
                           alt={annonce.titre}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-xl"
                         />
                       </div>
                     )}
@@ -159,6 +194,7 @@ export function Admin() {
                           </div>
                         </div>
                         <div className="flex gap-2">
+                         {/* Le button voir permet de récupérer l'id de l'annonce et de naviguer vers la page de détail */}
                           <Button 
                             size="sm" 
                             variant="outline"
@@ -166,6 +202,7 @@ export function Admin() {
                           >
                             Voir
                           </Button>
+                           {/* Le button voir permet de récupérer l'id de l'annonce et il stocke dans l'etat DeleteAnnonceId */}
                           <Button 
                             size="sm" 
                             variant="destructive"
@@ -184,7 +221,7 @@ export function Admin() {
             <p className="text-center text-gray-500 py-12">Aucune annonce</p>
           )}
         </TabsContent>
-
+        {/* Permet d'afficher tout les utilisateures bloqué et non bloqué*/}
         <TabsContent value="users" className="mt-6">
           {users.length > 0 ? (
             <div className="space-y-3">
@@ -194,7 +231,7 @@ export function Admin() {
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3 flex-1">
                         <Avatar>
-                          <AvatarImage src={`http://localhost:3000/uploads/${u.photo}`}  />
+                          <AvatarImage src={`https://collecte-backend.onrender.com/uploads/${u.photo}`}  />
                           <AvatarFallback>{u.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
@@ -249,8 +286,16 @@ export function Admin() {
           )}
         </TabsContent>
       </Tabs>
-
-      {/* Dialog pour suppression d'annonce */}
+  {/* 
+  Dialog de confirmation pour la suppression d'une annonce.
+  Ce composant s'affiche lorsque l'administrateur sélectionne une annonce à supprimer.
+  Il permet de demander une confirmation avant l'exécution de l'action.
+  L'utilisateur peut :
+  Annuler l'action pour fermer la boîte de dialogue sans supprimer l'annonce
+  Confirmer la suppression, ce qui entraîne la suppression définitive de l'annonce
+  Une fois la suppression effectuée, l'annonce est retirée de la base de données
+  et la liste est mise à jour.
+*/}
       <AlertDialog open={!!deleteAnnonceId} onOpenChange={(open) => !open && setDeleteAnnonceId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -268,7 +313,14 @@ export function Admin() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Dialog pour actions utilisateur */}
+  {/* 
+  Dialog de confirmation pour les actions sur les utilisateurs.
+  Cette fenêtre s'affiche lorsque l'administrateur souhaite :
+  bloquer ou débloquer un utilisateur
+  supprimer définitivement un utilisateur
+  Elle permet de confirmer ou d'annuler l'action avant exécution
+  afin d'éviter les suppressions ou modifications accidentelles.
+ */}
       <AlertDialog open={!!actionUser} onOpenChange={(open) => !open && setActionUser(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

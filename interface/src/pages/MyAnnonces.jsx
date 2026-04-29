@@ -71,7 +71,7 @@ export function MyAnnonces() {
         {annonce.photo ? (
           <div className="sm:w-48 h-48 sm:h-auto flex-`shrink`-0">
             <img
-              src={`http://localhost:3000/uploads/${annonce.photo}`} 
+              src={`https://collecte-backend.onrender.com/uploads/${annonce.photo}`} 
               alt={annonce.titre}
               className="w-full h-full object-cover"
             />

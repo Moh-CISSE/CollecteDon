@@ -60,7 +60,7 @@ export async function login(req, res) {
     return res.status(400).json({ message: "Mot de passe incorrect" });
   }
 
-  const token = jwt.sign({ id_user: user.id_user }, "SECRET_KEY", { expiresIn: "7d" });
+  const token = jwt.sign({ id_user: user.id_user }, "SECRET_KEY", { expiresIn: "1H" });
 
   delete user.password;
 

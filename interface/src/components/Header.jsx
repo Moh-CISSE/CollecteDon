@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/Authcontext";
 import { List, Plus, User, LogOut, Shield } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { DropdownMenu, DropdownMenuTrigger,DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "./ui/dropdown-menu";
@@ -24,8 +24,8 @@ useEffect(() => {
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-          <img src="../../public/Gemini_Generated_Image_trh359trh359trh3.png" alt="logo" className="w-10 h-10" />
-          <span className="font-bold text-xl text-gray-900">DonPlateforme</span>
+          <img src="/LOGO.png" alt="logo" className="w-10 h-10" />
+          <span className="font-bold text-xl text-gray-900">CoLlEcTeDoN</span>
         </Link>
    <nav className="flex items-center gap-4">
              {user && user.id_user ? (
@@ -41,7 +41,7 @@ useEffect(() => {
                    <DropdownMenuTrigger asChild>
                      <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                        <Avatar className="size-8">
-                         <AvatarImage src={`http://localhost:3000/uploads/${user.photo}`} />
+                         <AvatarImage src={`https://collecte-backend.onrender.com/uploads/${user.photo}`} />
                          <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                        </Avatar>
                        <span className="text-sm font-medium">{user.name}</span>
