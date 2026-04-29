@@ -68,17 +68,22 @@ export async function updateProfile(req, res) {
   try {
     const { name, phone } = req.body;
     const [current] = await db.query(
-      "SELECT photo FROM users WHERE id_user = ?",
+      "SELECT  name, phone, photo FROM users WHERE id_user = ?",
       [req.user.id_user]
     );
     if (!current.length) {
       return res.status(404).json({ message: "Utilisateur introuvable" });
     }
     const oldPhoto = current[0].photo || null;
+    const oldPhone = current[0].phone;
+    const oldName = current[0].name;
+
+    const finalPhone = phone && phone.trim() !== "" ? phone : oldPhone;
+    const finalName = name && name.trim() !== "" ? name : oldName;
     const newPhoto = req.file ? req.file.path : oldPhoto;
-    await db.query(
+   await db.query(
       "UPDATE users SET name = ?, phone = ?, photo = ? WHERE id_user = ?",
-      [name, phone, newPhoto, req.user.id_user]
+      [finalName, finalPhone, newPhoto, req.user.id_user]
     );
     const [rows] = await db.query(
       "SELECT id_user, name, email, phone, photo, isAdmin, isBlocked, createdAt FROM users WHERE id_user = ?",

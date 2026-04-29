@@ -101,7 +101,7 @@ export function Profile() {
               <Input
                 id="phone"
                 type="tel"
-                placeholder="06 12 34 56 78"
+                placeholder={user.email}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required
