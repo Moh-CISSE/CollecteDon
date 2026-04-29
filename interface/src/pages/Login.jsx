@@ -5,7 +5,7 @@ import { Label } from '../components/ui/label';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button'
 import { useState } from "react";
-import { useAuth } from '@/contexts/Authcontext';
+import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import { Alert,AlertDescription } from '@/components/ui/alert';
 
