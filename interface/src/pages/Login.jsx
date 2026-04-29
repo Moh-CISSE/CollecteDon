@@ -60,7 +60,7 @@ export function Login() {
                 <Input
                     id="email"
                     type="email"
-                    placeholder="exemple@email.fr"
+                    placeholder="Entrer Votre Email"
                     value = {email} 
                     onChange={(e) => setEmail(e.target.value)}
                     required
