@@ -128,7 +128,7 @@ export async function annonce(req, res) {
       SELECT 
         a.*,
         u.name AS userName,
-        u.phone AS userphone,
+        u.phone AS userPhone,
         u.email AS userEmail,
         u.photo AS userPhoto
       FROM annonce a

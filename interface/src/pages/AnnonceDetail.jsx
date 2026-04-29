@@ -211,7 +211,7 @@ export function AnnonceDetail() {
                       {annonce.userEmail}
                     </a>
                   </div>
-                  {annonce.userphone && (
+                  {annonce.userPhone && (
                     <div className="flex items-center gap-2 text-sm">
                       <Phone className="size-4 text-gray-500" />
                       <a
