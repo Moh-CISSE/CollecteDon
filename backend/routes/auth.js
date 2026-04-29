@@ -18,7 +18,7 @@ import {
   modifyAnnonce,
 } from "../controllers/authcontrollers.js";
 
-import auth from "../middleware JWT/auth.js";
+import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
