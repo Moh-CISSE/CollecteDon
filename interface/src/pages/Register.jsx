@@ -41,7 +41,7 @@ export function Register() {
     e.preventDefault();
     setError("");
     /* Vérification du format de l'email */
-    const emailRegex = /^[a-z]+[0-9]*[.]*[a-z]+@(gmail\.com|[a-z]+\.fr)+$/;
+    const emailRegex = /^[a-z]+[0-9]*[.]*[a-z]*@(gmail\.com|[a-z]+\.fr)+$/;
     if (!emailRegex.test(email) || email.length < 20) {
       setError("Email invalide");
       return;
