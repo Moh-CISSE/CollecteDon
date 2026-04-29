@@ -103,7 +103,7 @@ export function Register() {
               <Input
                 id="name"
                 type="text"
-                placeholder="Jean Dupont"
+                placeholder="Nom prenom"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -116,7 +116,7 @@ export function Register() {
               <Input
                 id="email"
                 type="email"
-                placeholder="exemple@email.fr"
+                placeholder="Entrer Votre Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -129,7 +129,7 @@ export function Register() {
               <Input
                 id="phone"
                 type="tel"
-                placeholder="0786000453"
+                placeholder="Entrez Votre Numero de telephone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 required

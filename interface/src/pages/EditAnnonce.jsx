@@ -210,6 +210,7 @@ export function EditAnnonce() {
                     setPhotoFile(file);
                   }
                 }}
+                required
               />
               <p className="text-xs text-gray-500">
                 Collez l'URL d'une image de l'objet (optionnel)

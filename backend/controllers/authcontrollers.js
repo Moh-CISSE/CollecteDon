@@ -96,19 +96,25 @@ export async function updateProfile(req, res) {
 /* ----------- Create Annonce -----------*/ 
 export async function create(req, res) {
   try {
-    const { titre, description, id_user, id_categorie,ville } = req.body;
+    const { titre, description, id_categorie, ville } = req.body;
+    const id_user = req.user.id_user; 
     const photo = req.file ? req.file.path : null;
+
     const [result] = await db.query(
-  `INSERT INTO annonce 
-  (titre, description, id_user, id_categorie, photo, status,ville, createdAt, updatedAt)
-  VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-  [titre, description, id_user, id_categorie, photo, "disponible",ville]);
-  return res.json({ message: "Annonce créée avec succès", id: result.insertId });
+      `INSERT INTO annonce 
+      (titre, description, id_user, id_categorie, photo, status, ville, createdAt, updatedAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+      [titre, description, id_user, id_categorie, photo, "disponible", ville]
+    );
+
+    return res.json({ message: "Annonce créée avec succès", id: result.insertId });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Erreur serveur" });
   }
 }
+
 
 /* ----------- ANNONCE -----------*/ 
 export async function annonce(req, res) {

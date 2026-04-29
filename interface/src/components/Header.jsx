@@ -19,8 +19,6 @@ useEffect(() => {
     toast.error("Cette action n'est pas autorisé, Vous êtes bloqués par l'administrateur");
   }
 }, [navigate]);
-console.log(user.photo);
-
   return (
     <>
       <header className="border-b bg-white sticky top-0 z-50">
@@ -43,7 +41,7 @@ console.log(user.photo);
                    <DropdownMenuTrigger asChild>
                      <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                        <Avatar className="size-8">
-                         <AvatarImage src={`https://collecte-backend.onrender.com/uploads/${user.photo}`} />
+                         <AvatarImage src={user.photo} />
                          <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                        </Avatar>
                        <span className="text-sm font-medium">{user.name}</span>

@@ -35,7 +35,7 @@ export function AnnonceCard({ annonce = defaultAnnonce }) {
         {annonce.photo && (
           <div className="w-full h-32 overflow-hidden rounded-t-lg">
             <img
-              src={`https://collecte-backend.onrender.com/uploads/${annonce.photo}`}
+              src={annonce.photo}
               alt={annonce.titre}
               className="w-full h-full object-cover"
             />
@@ -65,7 +65,7 @@ export function AnnonceCard({ annonce = defaultAnnonce }) {
         <CardFooter className="border-t pt-3 flex items-center gap-2">
           <Avatar className="size-6">
             <AvatarImage
-              src={`https://collecte-backend.onrender.com/uploads/${annonce.userPhoto}`}
+              src={annonce.userPhoto}
             />
             <AvatarFallback className="text-xs">
               {annonce.userName.charAt(0)}

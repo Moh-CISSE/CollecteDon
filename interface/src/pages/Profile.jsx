@@ -104,6 +104,7 @@ export function Profile() {
                 placeholder="06 12 34 56 78"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                required
               />
             </div>
 
