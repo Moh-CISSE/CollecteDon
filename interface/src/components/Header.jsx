@@ -19,6 +19,8 @@ useEffect(() => {
     toast.error("Cette action n'est pas autorisé, Vous êtes bloqués par l'administrateur");
   }
 }, [navigate]);
+console.log(user.photo);
+
   return (
     <>
       <header className="border-b bg-white sticky top-0 z-50">

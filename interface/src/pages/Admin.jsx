@@ -170,7 +170,7 @@ export function Admin() {
                     {annonce.photo && (
                       <div className="sm:w-32 h-32 flex-`shrink`-0">
                         <img
-                          src={`https://collecte-backend.onrender.com/uploads/${annonce.photo}`} 
+                          src={annonce.photo} 
                           alt={annonce.titre}
                           className="w-full h-full object-cover rounded-xl"
                         />
@@ -231,7 +231,7 @@ export function Admin() {
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3 flex-1">
                         <Avatar>
-                          <AvatarImage src={`https://collecte-backend.onrender.com/uploads/${u.photo}`}  />
+                          <AvatarImage src={u.photo}  />
                           <AvatarFallback>{u.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">

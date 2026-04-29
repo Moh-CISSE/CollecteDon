@@ -137,7 +137,7 @@ export function AnnonceDetail() {
           {annonce.photo ? (
             <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
               <img
-                src={`https://collecte-backend.onrender.com/uploads/${annonce.photo}`}
+                src={annonce.photo}
                 alt={annonce.titre}
                 className="w-full h-full object-cover"
               />
@@ -186,7 +186,7 @@ export function AnnonceDetail() {
                 <div className="flex items-center gap-3">
                   <Avatar>
                     <AvatarImage
-                      src={`https://collecte-backend.onrender.com/uploads/${annonce.userPhoto}`}
+                      src={annonce.userPhoto}
                     />
                     <AvatarFallback>
                       {annonce.userName.charAt(0)}

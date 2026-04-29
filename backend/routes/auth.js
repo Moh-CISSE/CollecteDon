@@ -1,8 +1,5 @@
 import express from "express";
-import multer from "multer";
-import path from "path";
-
-
+import upload from "../middleware/cloudinaryUpload.js";
 import {
   register,
   login,
@@ -25,16 +22,6 @@ import auth from "../middleware JWT/auth.js";
 
 const router = express.Router();
 
-// Configuration Multer
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    cb(null, Date.now() + ext);
-  }
-});
-
-const upload = multer({ storage });
 /* ------------------------- AUTHENTIFICATION ------------------------- */
 router.post("/register", register);
 router.post("/login", login);

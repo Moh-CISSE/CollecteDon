@@ -66,7 +66,7 @@ export function Profile() {
           {error && (<Alert variant="destructive"> <AlertDescription>{error}</AlertDescription></Alert>)}
             <div className="flex justify-center mb-6">
               <Avatar className="size-24">
-                <AvatarImage src={`https://collecte-backend.onrender.com/uploads/${user.photo}`} />
+                <AvatarImage src={user.photo} />
                 <AvatarFallback className="text-2xl">
                   {name.charAt(0).toUpperCase()}
                 </AvatarFallback>
