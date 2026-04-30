@@ -246,7 +246,7 @@ export function Admin() {
                           </div>
                           <p className="text-sm text-gray-600">{u.email}</p>
                           <p className="text-xs text-gray-500">
-                            {annonces.filter(a => a.userId === u.id_user).length} annonce(s)
+                            {annonces.filter(a => a.id_user === u.id_user).length} annonce(s)
                           </p>
                         </div>
                       </div>
