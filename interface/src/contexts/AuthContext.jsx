@@ -23,18 +23,32 @@ export const AuthContext = createContext(defaultAuthContext);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(defaultUser);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setToken(storedToken);
-      loadUser(storedToken);
+
+    if (!storedToken) {
+      setLoading(false); 
+      return;
     }
+
+    setToken(storedToken);
+    loadUser(storedToken).finally(() => setLoading(false)); 
   }, []);
 
   const loadUser = async (jwt) => {
-    const profile = await apiGetProfile(jwt);
-    if (profile) setUser(profile);
+    try {
+      const profile = await apiGetProfile(jwt);
+
+      if (!profile) {
+        logout(); 
+        return;
+      }
+      setUser(profile);
+    } catch (err) {
+      logout(); 
+    }
   };
 
   const login = async (email, password) => {
@@ -129,6 +143,7 @@ const blockUser = async (userId,val) =>{
       value={{
         user,
         token,
+        loading,
         login,
         register,
         logout,
