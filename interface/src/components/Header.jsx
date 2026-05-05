@@ -21,11 +21,11 @@ useEffect(() => {
 }, [navigate]);
   return (
     <>
-      <header className="border-b bg-white sticky top-0 z-50">
+      <header className="border-b bg-white sticky top-0 z-50 mb-0">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-          <img src="/LOGO.png" alt="logo" className="w-10 h-10" />
-          <span className="font-bold text-xl text-gray-900">CollecteDoN</span>
+          <img src="../../public/logo.png" alt="logo" className="w-10 h-10" />
+          <span className="text-left font-bold text-xl text-gray-900">CollecteDon</span>
         </Link>
    <nav className="flex items-center gap-4">
              {user && user.id_user ? (

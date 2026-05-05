@@ -34,6 +34,7 @@ export function Home() {
     /* Filtre par mot-clé (titre ou description) */
     const matchesSearch =
       annonce.titre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      annonce.ville?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       annonce.description?.toLowerCase().includes(searchTerm.toLowerCase());
     /* Filtre par catégorie */
     const matchesCategory =
@@ -49,15 +50,23 @@ export function Home() {
     <div className="container mx-auto px-4 py-8">
 
       {/* Section d'introduction */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Plateforme de Don entre Particuliers
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Donnez une seconde vie aux objets que vous n'utilisez plus. Partagez, 
-          récupérez gratuitement dans une démarche solidaire et écoresponsable.
-        </p>
-      </div>
+      <div className="mb-5 flex items-center gap-6 text-left">
+          <img 
+            src="../../public/image.png" 
+            alt="image" 
+            className="w-33 h-32 object-contain"
+          />
+
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+              Plateforme de Don entre Particuliers
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl">
+              Donnez une seconde vie aux objets que vous n'utilisez plus. Partagez, 
+              récupérez gratuitement dans une démarche solidaire et écoresponsable.
+            </p>
+          </div>
+        </div>
       {/* Barre de recherche et filtres */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
         <div className="flex flex-col md:flex-row gap-4">
