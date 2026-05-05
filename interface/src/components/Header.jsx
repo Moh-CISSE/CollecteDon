@@ -27,7 +27,7 @@ useEffect(() => {
           <img src="/logo.png" alt="logo" className="w-10 h-10" />
           <span className="text-left font-bold text-xl text-gray-900">CollecteDon</span>
         </Link>
-   <nav className="flex items-center gap-4">
+       <nav className="flex items-center gap-4">
              {user && user.id_user ? (
                <>
                  <Button asChild variant="outline" size="sm">
