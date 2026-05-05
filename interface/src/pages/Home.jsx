@@ -52,7 +52,7 @@ export function Home() {
       {/* Section d'introduction */}
       <div className="mb-5 flex items-center gap-6 text-left">
           <img 
-            src="../../public/image.png" 
+            src="/image.png" 
             alt="image" 
             className="w-33 h-32 object-contain"
           />
